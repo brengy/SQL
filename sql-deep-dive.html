@@ -1,0 +1,1232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advanced SQL Concepts</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        header {
+            text-align: center;
+            padding: 30px 0;
+            margin-bottom: 30px;
+        }
+        
+        h1 {
+            font-size: 3rem;
+            color: white;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.3);
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            color: #4fc3f7;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        
+        .back-link {
+            display: inline-block;
+            color: #4fc3f7;
+            text-decoration: none;
+            margin-bottom: 20px;
+            font-weight: bold;
+            padding: 8px 15px;
+            border-radius: 20px;
+            background: rgba(255,255,255,0.1);
+        }
+        
+        .back-link:hover {
+            background: rgba(255,255,255,0.2);
+        }
+        
+        .card {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            overflow: hidden;
+            margin-bottom: 30px;
+        }
+        
+        .card-header {
+            background: linear-gradient(to right, #0d47a1, #1976d2);
+            color: white;
+            padding: 20px;
+        }
+        
+        .card-header h2 {
+            font-size: 2rem;
+        }
+        
+        .card-body {
+            padding: 25px;
+        }
+        
+        .concept {
+            margin-bottom: 30px;
+            padding-bottom: 25px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .concept:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+        
+        .concept h3 {
+            color: #0d47a1;
+            margin-bottom: 15px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #1976d2;
+        }
+        
+        .concept p {
+            margin-bottom: 15px;
+            color: #444;
+        }
+        
+        .code-block {
+            background: #f8f9fa;
+            border-left: 4px solid #1976d2;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 0 8px 8px 0;
+            font-family: 'Courier New', monospace;
+            overflow-x: auto;
+        }
+        
+        .example {
+            background: #e3f2fd;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+        }
+        
+        .example h4 {
+            color: #0d47a1;
+            margin-bottom: 10px;
+        }
+        
+        .tip-box {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        
+        .tip-box strong {
+            color: #856404;
+        }
+        
+        .warning-box {
+            background: #f8d7da;
+            border-left: 4px solid #dc3545;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        
+        .warning-box strong {
+            color: #721c24;
+        }
+        
+        .success-box {
+            background: #d4edda;
+            border-left: 4px solid #28a745;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        
+        .success-box strong {
+            color: #155724;
+        }
+        
+        .join-types {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .join-card {
+            background: #f8f9fa;
+            border: 2px solid #1976d2;
+            border-radius: 8px;
+            padding: 15px;
+        }
+        
+        .join-card h4 {
+            color: #0d47a1;
+            margin-bottom: 10px;
+        }
+        
+        footer {
+            text-align: center;
+            color: white;
+            padding: 30px 0;
+            margin-top: 20px;
+            font-size: 0.9rem;
+        }
+        
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2.2rem;
+            }
+            
+            .card-body {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="index.html" class="back-link">← Back to Getting Started</a>
+        
+        <header>
+            <h1>Advanced SQL Concepts</h1>
+            <p class="subtitle">Master complex queries, joins, optimization, and database design patterns</p>
+        </header>
+        
+        <div class="card">
+            <div class="card-header">
+                <h2>🔄 Joins: Combining Multiple Tables</h2>
+            </div>
+            <div class="card-body">
+                <div class="concept">
+                    <h3>Understanding Table Relationships</h3>
+                    <p>Relational databases store data across multiple tables to reduce redundancy. Joins allow you to connect related data from different tables based on common columns.</p>
+                    
+                    <div class="success-box">
+                        <strong>Think of it this way:</strong> If you have a "customers" table and an "orders" table, joins let you see which customer placed which order by connecting them through a customer_id.
+                    </div>
+                    
+                    <div class="join-types">
+                        <div class="join-card">
+                            <h4>INNER JOIN</h4>
+                            <p>Returns only matching rows from both tables</p>
+                        </div>
+                        <div class="join-card">
+                            <h4>LEFT JOIN</h4>
+                            <p>All rows from left table + matching rows from right</p>
+                        </div>
+                        <div class="join-card">
+                            <h4>RIGHT JOIN</h4>
+                            <p>All rows from right table + matching rows from left</p>
+                        </div>
+                        <div class="join-card">
+                            <h4>FULL OUTER JOIN</h4>
+                            <p>All rows from both tables (SQLite doesn't support this)</p>
+                        </div>
+                        <div class="join-card">
+                            <h4>CROSS JOIN</h4>
+                            <p>Cartesian product - every combination</p>
+                        </div>
+                        <div class="join-card">
+                            <h4>SELF JOIN</h4>
+                            <p>Join a table to itself</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="concept">
+                    <h3>INNER JOIN - Most Common</h3>
+                    <p>Returns only rows where there's a match in both tables.</p>
+                    
+                    <div class="example">
+                        <h4>Basic INNER JOIN</h4>
+                        <div class="code-block">
+                            SELECT <br>
+                            &nbsp;&nbsp;customers.name,<br>
+                            &nbsp;&nbsp;orders.order_id,<br>
+                            &nbsp;&nbsp;orders.total,<br>
+                            &nbsp;&nbsp;orders.order_date<br>
+                            FROM customers<br>
+                            INNER JOIN orders ON customers.id = orders.customer_id;<br><br>
+                            
+                            -- With table aliases (cleaner)<br>
+                            SELECT <br>
+                            &nbsp;&nbsp;c.name,<br>
+                            &nbsp;&nbsp;o.order_id,<br>
+                            &nbsp;&nbsp;o.total<br>
+                            FROM customers c<br>
+                            INNER JOIN orders o ON c.id = o.customer_id;
+                        </div>
+                    </div>
+                    
+                    <div class="example">
+                        <h4>Multiple Joins</h4>
+                        <div class="code-block">
+                            SELECT <br>
+                            &nbsp;&nbsp;c.name as customer_name,<br>
+                            &nbsp;&nbsp;o.order_id,<br>
+                            &nbsp;&nbsp;p.product_name,<br>
+                            &nbsp;&nbsp;oi.quantity,<br>
+                            &nbsp;&nbsp;oi.price<br>
+                            FROM customers c<br>
+                            INNER JOIN orders o ON c.id = o.customer_id<br>
+                            INNER JOIN order_items oi ON o.order_id = oi.order_id<br>
+                            INNER JOIN products p ON oi.product_id = p.id<br>
+                            WHERE o.order_date >= '2025-01-01';
+                        </div>
+                    </div>
+                    
+                    <div class="tip-box">
+                        <strong>Pro Tip:</strong> Always use table aliases (like 'c' for customers) when working with multiple tables. It makes queries much more readable!
+                    </div>
+                </div>
+                
+                <div class="concept">
+                    <h3>LEFT JOIN - Include All Left Table Rows</h3>
+                    <p>Returns all rows from the left table, even if there's no match in the right table. Unmatched rows will have NULL values.</p>
+                    
+                    <div class="example">
+                        <h4>Find Customers with or without Orders</h4>
+                        <div class="code-block">
+                            SELECT <br>
+                            &nbsp;&nbsp;c.name,<br>
+                            &nbsp;&nbsp;c.email,<br>
+                            &nbsp;&nbsp;COUNT(o.order_id) as total_orders,<br>
+                            &nbsp;&nbsp;COALESCE(SUM(o.total), 0) as total_spent<br>
+                            FROM customers c<br>
+                            LEFT JOIN orders o ON c.id = o.customer_id<br>
+                            GROUP BY c.id, c.name, c.email;<br><br>
+                            
+                            -- Find customers who NEVER ordered<br>
+                            SELECT c.name, c.email<br>
+                            FROM customers c<br>
+                            LEFT JOIN orders o ON c.id = o.customer_id<br>
+                            WHERE o.order_id IS NULL;
+                        </div>
+                    </div>
+                    
+                    <div class="success-box">
+                        <strong>Use Case:</strong> LEFT JOIN is perfect when you want to find "all X, including those without Y" - like all customers including those who never placed an order.
+                    </div>
+                </div>
+                
+                <div class="concept">
+                    <h3>SELF JOIN - Hierarchical Data</h3>
+                    <p>Join a table to itself to find relationships within the same table.</p>
+                    
+                    <div class="example">
+                        <h4>Employee-Manager Relationship</h4>
+                        <div class="code-block">
+                            -- Assuming employees table has: id, name, manager_id<br>
+                            SELECT <br>
+                            &nbsp;&nbsp;e.name as employee_name,<br>
+                            &nbsp;&nbsp;m.name as manager_name<br>
+                            FROM employees e<br>
+                            LEFT JOIN employees m ON e.manager_id = m.id;<br><br>
+                            
+                            -- Find employees who earn more than their manager<br>
+                            SELECT <br>
+                            &nbsp;&nbsp;e.name as employee,<br>
+                            &nbsp;&nbsp;e.salary as emp_salary,<br>
+                            &nbsp;&nbsp;m.name as manager,<br>
+                            &nbsp;&nbsp;m.salary as mgr_salary<br>
+                            FROM employees e<br>
+                            INNER JOIN employees m ON e.manager_id = m.id<br>
+                            WHERE e.salary > m.salary;
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                <h2>🎯 Subqueries & CTEs</h2>
+            </div>
+            <div class="card-body">
+                <div class="concept">
+                    <h3>Subqueries: Queries Inside Queries</h3>
+                    <p>A subquery is a query nested inside another query. Use them when you need intermediate results.</p>
+                    
+                    <div class="example">
+                        <h4>In WHERE Clause</h4>
+                        <div class="code-block">
+                            -- Find employees earning above average<br>
+                            SELECT name, salary<br>
+                            FROM employees<br>
+                            WHERE salary > (SELECT AVG(salary) FROM employees);<br><br>
+                            
+                            -- Find customers who placed large orders<br>
+                            SELECT name, email<br>
+                            FROM customers<br>
+                            WHERE id IN (<br>
+                            &nbsp;&nbsp;SELECT customer_id <br>
+                            &nbsp;&nbsp;FROM orders <br>
+                            &nbsp;&nbsp;WHERE total > 1000<br>
+                            );
+                        </div>
+                    </div>
+                    
+                    <div class="example">
+                        <h4>In SELECT Clause (Scalar Subquery)</h4>
+                        <div class="code-block">
+                            SELECT <br>
+                            &nbsp;&nbsp;c.name,<br>
+                            &nbsp;&nbsp;c.email,<br>
+                            &nbsp;&nbsp;(SELECT COUNT(*) FROM orders o WHERE o.customer_id = c.id) as order_count,<br>
+                            &nbsp;&nbsp;(SELECT SUM(total) FROM orders o WHERE o.customer_id = c.id) as total_spent<br>
+                            FROM customers c;
+                        </div>
+                    </div>
+                    
+                    <div class="example">
+                        <h4>In FROM Clause (Derived Table)</h4>
+                        <div class="code-block">
+                            -- Find average order value by customer category<br>
+                            SELECT <br>
+                            &nbsp;&nbsp;category,<br>
+                            &nbsp;&nbsp;AVG(order_total) as avg_order_value<br>
+                            FROM (<br>
+                            &nbsp;&nbsp;SELECT <br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;c.category,<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;o.total as order_total<br>
+                            &nbsp;&nbsp;FROM customers c<br>
+                            &nbsp;&nbsp;JOIN orders o ON c.id = o.customer_id<br>
+                            ) as customer_orders<br>
+                            GROUP BY category;
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="concept">
+                    <h3>CTEs: Common Table Expressions (WITH clause)</h3>
+                    <p>CTEs make complex queries more readable by breaking them into named, temporary result sets. Think of them as "query variables".</p>
+                    
+                    <div class="example">
+                        <h4>Basic CTE</h4>
+                        <div class="code-block">
+                            WITH high_value_customers AS (<br>
+                            &nbsp;&nbsp;SELECT <br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;customer_id,<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;SUM(total) as total_spent<br>
+                            &nbsp;&nbsp;FROM orders<br>
+                            &nbsp;&nbsp;GROUP BY customer_id<br>
+                            &nbsp;&nbsp;HAVING SUM(total) > 5000<br>
+                            )<br>
+                            SELECT <br>
+                            &nbsp;&nbsp;c.name,<br>
+                            &nbsp;&nbsp;c.email,<br>
+                            &nbsp;&nbsp;hvc.total_spent<br>
+                            FROM customers c<br>
+                            INNER JOIN high_value_customers hvc ON c.id = hvc.customer_id<br>
+                            ORDER BY hvc.total_spent DESC;
+                        </div>
+                    </div>
+                    
+                    <div class="example">
+                        <h4>Multiple CTEs</h4>
+                        <div class="code-block">
+                            WITH <br>
+                            monthly_sales AS (<br>
+                            &nbsp;&nbsp;SELECT <br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;strftime('%Y-%m', order_date) as month,<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;SUM(total) as sales<br>
+                            &nbsp;&nbsp;FROM orders<br>
+                            &nbsp;&nbsp;GROUP BY strftime('%Y-%m', order_date)<br>
+                            ),<br>
+                            avg_monthly AS (<br>
+                            &nbsp;&nbsp;SELECT AVG(sales) as avg_sales<br>
+                            &nbsp;&nbsp;FROM monthly_sales<br>
+                            )<br>
+                            SELECT <br>
+                            &nbsp;&nbsp;ms.month,<br>
+                            &nbsp;&nbsp;ms.sales,<br>
+                            &nbsp;&nbsp;am.avg_sales,<br>
+                            &nbsp;&nbsp;CASE <br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;WHEN ms.sales > am.avg_sales THEN 'Above Average'<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;ELSE 'Below Average'<br>
+                            &nbsp;&nbsp;END as performance<br>
+                            FROM monthly_sales ms<br>
+                            CROSS JOIN avg_monthly am<br>
+                            ORDER BY ms.month;
+                        </div>
+                    </div>
+                    
+                    <div class="tip-box">
+                        <strong>CTE vs Subquery:</strong> Use CTEs for better readability, especially when you need to reference the same subquery multiple times. CTEs are also easier to debug and maintain.
+                    </div>
+                </div>
+                
+                <div class="concept">
+                    <h3>Recursive CTEs (Advanced)</h3>
+                    <p>Recursive CTEs can reference themselves - perfect for hierarchical data like organizational charts or category trees.</p>
+                    
+                    <div class="example">
+                        <h4>Employee Hierarchy</h4>
+                        <div class="code-block">
+                            WITH RECURSIVE employee_hierarchy AS (<br>
+                            &nbsp;&nbsp;-- Base case: top-level employees (no manager)<br>
+                            &nbsp;&nbsp;SELECT id, name, manager_id, 1 as level<br>
+                            &nbsp;&nbsp;FROM employees<br>
+                            &nbsp;&nbsp;WHERE manager_id IS NULL<br>
+                            &nbsp;&nbsp;<br>
+                            &nbsp;&nbsp;UNION ALL<br>
+                            &nbsp;&nbsp;<br>
+                            &nbsp;&nbsp;-- Recursive case: employees with managers<br>
+                            &nbsp;&nbsp;SELECT e.id, e.name, e.manager_id, eh.level + 1<br>
+                            &nbsp;&nbsp;FROM employees e<br>
+                            &nbsp;&nbsp;INNER JOIN employee_hierarchy eh ON e.manager_id = eh.id<br>
+                            )<br>
+                            SELECT * FROM employee_hierarchy<br>
+                            ORDER BY level, name;
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                <h2>📊 Window Functions</h2>
+            </div>
+            <div class="card-body">
+                <div class="concept">
+                    <h3>What Are Window Functions?</h3>
+                    <p>Window functions perform calculations across a set of table rows that are related to the current row. Unlike GROUP BY, they don't collapse rows - each row keeps its identity!</p>
+                    
+                    <div class="success-box">
+                        <strong>Key Difference:</strong> GROUP BY reduces multiple rows into one. Window functions keep all rows but add calculated columns based on groups.
+                    </div>
+                </div>
+                
+                <div class="concept">
+                    <h3>Ranking Functions</h3>
+                    
+                    <div class="example">
+                        <h4>ROW_NUMBER(), RANK(), DENSE_RANK()</h4>
+                        <div class="code-block">
+                            -- Rank employees by salary within each department<br>
+                            SELECT <br>
+                            &nbsp;&nbsp;name,<br>
+                            &nbsp;&nbsp;department,<br>
+                            &nbsp;&nbsp;salary,<br>
+                            &nbsp;&nbsp;ROW_NUMBER() OVER (PARTITION BY department ORDER BY salary DESC) as row_num,<br>
+                            &nbsp;&nbsp;RANK() OVER (PARTITION BY department ORDER BY salary DESC) as rank,<br>
+                            &nbsp;&nbsp;DENSE_RANK() OVER (PARTITION BY department ORDER BY salary DESC) as dense_rank<br>
+                            FROM employees;<br><br>
+                            
+                            -- Find top 3 highest paid in each department<br>
+                            WITH ranked_employees AS (<br>
+                            &nbsp;&nbsp;SELECT <br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;name,<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;department,<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;salary,<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;ROW_NUMBER() OVER (PARTITION BY department ORDER BY salary DESC) as rn<br>
+                            &nbsp;&nbsp;FROM employees<br>
+                            )<br>
+                            SELECT name, department, salary<br>
+                            FROM ranked_employees<br>
+                            WHERE rn <= 3;
+                        </div>
+                    </div>
+                    
+                    <div class="tip-box">
+                        <strong>Differences:</strong><br>
+                        • ROW_NUMBER(): Always unique (1,2,3,4...)<br>
+                        • RANK(): Gaps after ties (1,2,2,4...)<br>
+                        • DENSE_RANK(): No gaps (1,2,2,3...)
+                    </div>
+                </div>
+                
+                <div class="concept">
+                    <h3>Aggregate Window Functions</h3>
+                    
+                    <div class="example">
+                        <h4>Running Totals & Moving Averages</h4>
+                        <div class="code-block">
+                            -- Running total of sales<br>
+                            SELECT <br>
+                            &nbsp;&nbsp;order_date,<br>
+                            &nbsp;&nbsp;daily_sales,<br>
+                            &nbsp;&nbsp;SUM(daily_sales) OVER (ORDER BY order_date) as running_total,<br>
+                            &nbsp;&nbsp;AVG(daily_sales) OVER (ORDER BY order_date ROWS BETWEEN 6 PRECEDING AND CURRENT ROW) as moving_avg_7days<br>
+                            FROM daily_sales_summary;<br><br>
+                            
+                            -- Compare each sale to department average<br>
+                            SELECT <br>
+                            &nbsp;&nbsp;product_name,<br>
+                            &nbsp;&nbsp;category,<br>
+                            &nbsp;&nbsp;sales,<br>
+                            &nbsp;&nbsp;AVG(sales) OVER (PARTITION BY category) as category_avg,<br>
+                            &nbsp;&nbsp;sales - AVG(sales) OVER (PARTITION BY category) as diff_from_avg<br>
+                            FROM product_sales;
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="concept">
+                    <h3>Value Functions</h3>
+                    
+                    <div class="example">
+                        <h4>LAG(), LEAD(), FIRST_VALUE(), LAST_VALUE()</h4>
+                        <div class="code-block">
+                            -- Compare current month to previous month<br>
+                            SELECT <br>
+                            &nbsp;&nbsp;month,<br>
+                            &nbsp;&nbsp;revenue,<br>
+                            &nbsp;&nbsp;LAG(revenue) OVER (ORDER BY month) as prev_month_revenue,<br>
+                            &nbsp;&nbsp;revenue - LAG(revenue) OVER (ORDER BY month) as month_over_month_change,<br>
+                            &nbsp;&nbsp;LEAD(revenue) OVER (ORDER BY month) as next_month_revenue<br>
+                            FROM monthly_revenue;<br><br>
+                            
+                            -- Show first and last order for each customer<br>
+                            SELECT <br>
+                            &nbsp;&nbsp;customer_id,<br>
+                            &nbsp;&nbsp;order_date,<br>
+                            &nbsp;&nbsp;total,<br>
+                            &nbsp;&nbsp;FIRST_VALUE(order_date) OVER (PARTITION BY customer_id ORDER BY order_date) as first_order,<br>
+                            &nbsp;&nbsp;LAST_VALUE(order_date) OVER (PARTITION BY customer_id ORDER BY order_date ROWS BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING) as last_order<br>
+                            FROM orders;
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                <h2>🏗️ Database Design & Optimization</h2>
+            </div>
+            <div class="card-body">
+                <div class="concept">
+                    <h3>Normalization: Organizing Your Data</h3>
+                    <p>Normalization reduces data redundancy and improves data integrity by organizing tables properly.</p>
+                    
+                    <div class="example">
+                        <h4>1st Normal Form (1NF)</h4>
+                        <p>Each column contains atomic (indivisible) values, and each column contains values of a single type.</p>
+                        <div class="warning-box">
+                            <strong>Bad:</strong> phone_numbers = "123-4567, 987-6543"
+                        </div>
+                        <div class="success-box">
+                            <strong>Good:</strong> Separate table for phone numbers with one number per row
+                        </div>
+                    </div>
+                    
+                    <div class="example">
+                        <h4>2nd Normal Form (2NF)</h4>
+                        <p>Must be in 1NF, and all non-key columns must depend on the entire primary key (not just part of it).</p>
+                        <div class="code-block">
+                            -- Bad: order_items (order_id, product_id, customer_name)<br>
+                            -- customer_name depends only on order_id, not the full key<br><br>
+                            
+                            -- Good: Separate customer info into customers table<br>
+                            CREATE TABLE order_items (<br>
+                            &nbsp;&nbsp;order_id INT,<br>
+                            &nbsp;&nbsp;product_id INT,<br>
+                            &nbsp;&nbsp;quantity INT,<br>
+                            &nbsp;&nbsp;PRIMARY KEY (order_id, product_id)<br>
+                            );
+                        </div>
+                    </div>
+                    
+                    <div class="example">
+                        <h4>3rd Normal Form (3NF)</h4>
+                        <p>Must be in 2NF, and no transitive dependencies (non-key columns depending on other non-key columns).</p>
+                        <div class="code-block">
+                            -- Bad: employees (id, name, department_id, department_name)<br>
+                            -- department_name depends on department_id, not directly on id<br><br>
+                            
+                            -- Good: Separate departments table<br>
+                            CREATE TABLE employees (<br>
+                            &nbsp;&nbsp;id INT PRIMARY KEY,<br>
+                            &nbsp;&nbsp;name TEXT,<br>
+                            &nbsp;&nbsp;department_id INT<br>
+                            );<br><br>
+                            
+                            CREATE TABLE departments (<br>
+                            &nbsp;&nbsp;id INT PRIMARY KEY,<br>
+                            &nbsp;&nbsp;name TEXT<br>
+                            );
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="concept">
+                    <h3>Indexes: Speed Up Your Queries</h3>
+                    <p>Indexes are like a book's index - they help find data quickly without scanning every row.</p>
+                    
+                    <div class="example">
+                        <h4>Creating Indexes</h4>
+                        <div class="code-block">
+                            -- Single column index<br>
+                            CREATE INDEX idx_customers_email ON customers(email);<br><br>
+                            
+                            -- Composite index (multiple columns)<br>
+                            CREATE INDEX idx_orders_customer_date ON orders(customer_id, order_date);<br><br>
+                            
+                            -- Unique index<br>
+                            CREATE UNIQUE INDEX idx_users_username ON users(username);<br><br>
+                            
+                            -- Drop index<br>
+                            DROP INDEX idx_customers_email;
+                        </div>
+                    </div>
+                    
+                    <div class="tip-box">
+                        <strong>When to Index:</strong><br>
+                        • Columns used in WHERE clauses<br>
+                        • Columns used in JOIN conditions<br>
+                        • Columns used in ORDER BY<br>
+                        • Foreign key columns
+                    </div>
+                    
+                    <div class="warning-box">
+                        <strong>When NOT to Index:</strong><br>
+                        • Small tables (overhead > benefit)<br>
+                        • Columns with many NULL values<br>
+                        • Columns frequently updated<br>
+                        • Columns with low cardinality (few unique values)
+                    </div>
+                </div>
+                
+                <div class="concept">
+                    <h3>Query Optimization Techniques</h3>
+                    
+                    <div class="example">
+                        <h4>1. Use EXPLAIN to Analyze Queries</h4>
+                        <div class="code-block">
+                            -- See query execution plan<br>
+                            EXPLAIN QUERY PLAN<br>
+                            SELECT * FROM orders <br>
+                            WHERE customer_id = 123 AND order_date > '2025-01-01';<br><br>
+                            
+                            -- Look for:<br>
+                            -- • "SCAN" = bad (reads all rows)<br>
+                            -- • "SEARCH" or "SEARCH USING INDEX" = good
+                        </div>
+                    </div>
+                    
+                    <div class="example">
+                        <h4>2. Select Only What You Need</h4>
+                        <div class="code-block">
+                            -- Bad: Fetches all columns (slower, more memory)<br>
+                            SELECT * FROM products WHERE category = 'Electronics';<br><br>
+                            
+                            -- Good: Only columns you need<br>
+                            SELECT id, name, price FROM products WHERE category = 'Electronics';
+                        </div>
+                    </div>
+                    
+                    <div class="example">
+                        <h4>3. Use EXISTS Instead of IN for Subqueries</h4>
+                        <div class="code-block">
+                            -- Slower (IN evaluates entire subquery)<br>
+                            SELECT name FROM customers<br>
+                            WHERE id IN (SELECT customer_id FROM orders WHERE total > 1000);<br><br>
+                            
+                            -- Faster (EXISTS stops at first match)<br>
+                            SELECT name FROM customers c<br>
+                            WHERE EXISTS (<br>
+                            &nbsp;&nbsp;SELECT 1 FROM orders o <br>
+                            &nbsp;&nbsp;WHERE o.customer_id = c.id AND o.total > 1000<br>
+                            );
+                        </div>
+                    </div>
+                    
+                    <div class="example">
+                        <h4>4. Avoid Functions on Indexed Columns in WHERE</h4>
+                        <div class="code-block">
+                            -- Bad: Can't use index on created_at<br>
+                            SELECT * FROM orders WHERE YEAR(created_at) = 2025;<br><br>
+                            
+                            -- Good: Index can be used<br>
+                            SELECT * FROM orders <br>
+                            WHERE created_at >= '2025-01-01' AND created_at < '2026-01-01';
+                        </div>
+                    </div>
+                    
+                    <div class="example">
+                        <h4>5. Use LIMIT for Testing</h4>
+                        <div class="code-block">
+                            -- Test query on small dataset first<br>
+                            SELECT * FROM huge_table<br>
+                            WHERE complex_condition<br>
+                            LIMIT 100;<br><br>
+                            
+                            -- Once confirmed correct, run without LIMIT
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="concept">
+                    <h3>Transactions: ACID Properties</h3>
+                    <p>Transactions ensure data integrity by grouping multiple operations into a single unit.</p>
+                    
+                    <div class="success-box">
+                        <strong>ACID Properties:</strong><br>
+                        • <strong>A</strong>tomicity: All or nothing<br>
+                        • <strong>C</strong>onsistency: Data remains valid<br>
+                        • <strong>I</strong>solation: Transactions don't interfere<br>
+                        • <strong>D</strong>urability: Changes persist
+                    </div>
+                    
+                    <div class="example">
+                        <h4>Using Transactions</h4>
+                        <div class="code-block">
+                            -- Start transaction<br>
+                            BEGIN TRANSACTION;<br><br>
+                            
+                            -- Transfer money between accounts<br>
+                            UPDATE accounts SET balance = balance - 100 WHERE id = 1;<br>
+                            UPDATE accounts SET balance = balance + 100 WHERE id = 2;<br><br>
+                            
+                            -- If everything is OK, commit<br>
+                            COMMIT;<br><br>
+                            
+                            -- If there's an error, rollback<br>
+                            ROLLBACK;
+                        </div>
+                    </div>
+                    
+                    <div class="example">
+                        <h4>Real-World Example: Order Processing</h4>
+                        <div class="code-block">
+                            BEGIN TRANSACTION;<br><br>
+                            
+                            -- Insert order<br>
+                            INSERT INTO orders (customer_id, total, order_date)<br>
+                            VALUES (123, 299.99, CURRENT_TIMESTAMP);<br><br>
+                            
+                            -- Get the order_id<br>
+                            -- (In practice, use RETURNING clause or last_insert_rowid())<br><br>
+                            
+                            -- Insert order items<br>
+                            INSERT INTO order_items (order_id, product_id, quantity, price)<br>
+                            VALUES (1001, 5, 2, 149.99);<br><br>
+                            
+                            -- Update inventory<br>
+                            UPDATE products SET stock = stock - 2 WHERE id = 5;<br><br>
+                            
+                            -- Update customer's total purchases<br>
+                            UPDATE customers <br>
+                            SET total_purchases = total_purchases + 299.99<br>
+                            WHERE id = 123;<br><br>
+                            
+                            COMMIT;
+                        </div>
+                    </div>
+                    
+                    <div class="warning-box">
+                        <strong>Important:</strong> Always use transactions when multiple related changes must succeed or fail together. This prevents data inconsistencies.
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                <h2>🔒 Data Constraints & Integrity</h2>
+            </div>
+            <div class="card-body">
+                <div class="concept">
+                    <h3>Primary Keys & Foreign Keys</h3>
+                    
+                    <div class="example">
+                        <h4>Primary Key Constraints</h4>
+                        <div class="code-block">
+                            -- Auto-incrementing integer PK<br>
+                            CREATE TABLE customers (<br>
+                            &nbsp;&nbsp;id INTEGER PRIMARY KEY AUTOINCREMENT,<br>
+                            &nbsp;&nbsp;name TEXT NOT NULL<br>
+                            );<br><br>
+                            
+                            -- Composite primary key<br>
+                            CREATE TABLE order_items (<br>
+                            &nbsp;&nbsp;order_id INTEGER,<br>
+                            &nbsp;&nbsp;product_id INTEGER,<br>
+                            &nbsp;&nbsp;quantity INTEGER,<br>
+                            &nbsp;&nbsp;PRIMARY KEY (order_id, product_id)<br>
+                            );
+                        </div>
+                    </div>
+                    
+                    <div class="example">
+                        <h4>Foreign Key Constraints</h4>
+                        <div class="code-block">
+                            -- Enable foreign keys (SQLite)<br>
+                            PRAGMA foreign_keys = ON;<br><br>
+                            
+                            CREATE TABLE orders (<br>
+                            &nbsp;&nbsp;id INTEGER PRIMARY KEY,<br>
+                            &nbsp;&nbsp;customer_id INTEGER NOT NULL,<br>
+                            &nbsp;&nbsp;order_date DATE,<br>
+                            &nbsp;&nbsp;FOREIGN KEY (customer_id) REFERENCES customers(id)<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;ON DELETE CASCADE<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;ON UPDATE CASCADE<br>
+                            );<br><br>
+                            
+                            -- ON DELETE CASCADE: Delete orders when customer is deleted<br>
+                            -- ON DELETE SET NULL: Set customer_id to NULL<br>
+                            -- ON DELETE RESTRICT: Prevent deletion if orders exist
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="concept">
+                    <h3>Column Constraints</h3>
+                    
+                    <div class="example">
+                        <h4>Common Constraints</h4>
+                        <div class="code-block">
+                            CREATE TABLE products (<br>
+                            &nbsp;&nbsp;id INTEGER PRIMARY KEY,<br>
+                            &nbsp;&nbsp;name TEXT NOT NULL,                    -- Required field<br>
+                            &nbsp;&nbsp;sku TEXT UNIQUE,                       -- Must be unique<br>
+                            &nbsp;&nbsp;price DECIMAL(10,2) CHECK (price > 0), -- Must be positive<br>
+                            &nbsp;&nbsp;stock INTEGER DEFAULT 0,               -- Default value<br>
+                            &nbsp;&nbsp;category TEXT CHECK (category IN ('Electronics', 'Clothing', 'Books')),<br>
+                            &nbsp;&nbsp;created_at DATETIME DEFAULT CURRENT_TIMESTAMP<br>
+                            );<br><br>
+                            
+                            -- Table-level CHECK constraint<br>
+                            CREATE TABLE employees (<br>
+                            &nbsp;&nbsp;id INTEGER PRIMARY KEY,<br>
+                            &nbsp;&nbsp;name TEXT,<br>
+                            &nbsp;&nbsp;hire_date DATE,<br>
+                            &nbsp;&nbsp;birth_date DATE,<br>
+                            &nbsp;&nbsp;CHECK (hire_date > birth_date)<br>
+                            );
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                <h2>🎨 Advanced Query Patterns</h2>
+            </div>
+            <div class="card-body">
+                <div class="concept">
+                    <h3>CASE Expressions</h3>
+                    <p>Add conditional logic directly in your queries.</p>
+                    
+                    <div class="example">
+                        <h4>Simple CASE</h4>
+                        <div class="code-block">
+                            SELECT <br>
+                            &nbsp;&nbsp;name,<br>
+                            &nbsp;&nbsp;grade,<br>
+                            &nbsp;&nbsp;CASE <br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;WHEN grade >= 90 THEN 'A'<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;WHEN grade >= 80 THEN 'B'<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;WHEN grade >= 70 THEN 'C'<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;WHEN grade >= 60 THEN 'D'<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;ELSE 'F'<br>
+                            &nbsp;&nbsp;END as letter_grade<br>
+                            FROM students;
+                        </div>
+                    </div>
+                    
+                    <div class="example">
+                        <h4>CASE in Aggregations</h4>
+                        <div class="code-block">
+                            -- Pivot data: Count orders by status<br>
+                            SELECT <br>
+                            &nbsp;&nbsp;customer_id,<br>
+                            &nbsp;&nbsp;COUNT(CASE WHEN status = 'pending' THEN 1 END) as pending_orders,<br>
+                            &nbsp;&nbsp;COUNT(CASE WHEN status = 'completed' THEN 1 END) as completed_orders,<br>
+                            &nbsp;&nbsp;COUNT(CASE WHEN status = 'cancelled' THEN 1 END) as cancelled_orders<br>
+                            FROM orders<br>
+                            GROUP BY customer_id;
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="concept">
+                    <h3>UNION, INTERSECT, EXCEPT</h3>
+                    <p>Combine results from multiple queries.</p>
+                    
+                    <div class="example">
+                        <h4>Set Operations</h4>
+                        <div class="code-block">
+                            -- UNION: Combine results, remove duplicates<br>
+                            SELECT name FROM customers<br>
+                            UNION<br>
+                            SELECT name FROM suppliers;<br><br>
+                            
+                            -- UNION ALL: Keep duplicates (faster)<br>
+                            SELECT product_name FROM orders_2024<br>
+                            UNION ALL<br>
+                            SELECT product_name FROM orders_2025;<br><br>
+                            
+                            -- INTERSECT: Only rows in both<br>
+                            SELECT email FROM customers<br>
+                            INTERSECT<br>
+                            SELECT email FROM newsletter_subscribers;<br><br>
+                            
+                            -- EXCEPT: Rows in first but not in second<br>
+                            SELECT email FROM customers<br>
+                            EXCEPT<br>
+                            SELECT email FROM unsubscribed;
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="concept">
+                    <h3>String Functions</h3>
+                    
+                    <div class="example">
+                        <h4>Useful String Operations</h4>
+                        <div class="code-block">
+                            -- Concatenation<br>
+                            SELECT first_name || ' ' || last_name as full_name FROM users;<br><br>
+                            
+                            -- Upper/Lower case<br>
+                            SELECT UPPER(email), LOWER(name) FROM customers;<br><br>
+                            
+                            -- Substring<br>
+                            SELECT SUBSTR(phone, 1, 3) as area_code FROM contacts;<br><br>
+                            
+                            -- Length<br>
+                            SELECT name, LENGTH(name) as name_length FROM products;<br><br>
+                            
+                            -- Trim whitespace<br>
+                            SELECT TRIM(name) FROM dirty_data;<br><br>
+                            
+                            -- Replace<br>
+                            SELECT REPLACE(phone, '-', '') as clean_phone FROM contacts;
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="concept">
+                    <h3>Date/Time Functions</h3>
+                    
+                    <div class="example">
+                        <h4>Working with Dates</h4>
+                        <div class="code-block">
+                            -- Current date/time<br>
+                            SELECT CURRENT_DATE, CURRENT_TIME, CURRENT_TIMESTAMP;<br><br>
+                            
+                            -- Date arithmetic (SQLite)<br>
+                            SELECT date('now', '+7 days') as next_week;<br>
+                            SELECT date('now', '-1 month') as last_month;<br><br>
+                            
+                            -- Extract parts<br>
+                            SELECT <br>
+                            &nbsp;&nbsp;strftime('%Y', order_date) as year,<br>
+                            &nbsp;&nbsp;strftime('%m', order_date) as month,<br>
+                            &nbsp;&nbsp;strftime('%d', order_date) as day<br>
+                            FROM orders;<br><br>
+                            
+                            -- Age of records<br>
+                            SELECT <br>
+                            &nbsp;&nbsp;name,<br>
+                            &nbsp;&nbsp;created_at,<br>
+                            &nbsp;&nbsp;julianday('now') - julianday(created_at) as days_old<br>
+                            FROM users;
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                <h2>📖 Real-World Examples</h2>
+            </div>
+            <div class="card-body">
+                <div class="concept">
+                    <h3>E-commerce: Sales Analytics</h3>
+                    
+                    <div class="example">
+                        <h4>Monthly Revenue Report</h4>
+                        <div class="code-block">
+                            WITH monthly_stats AS (<br>
+                            &nbsp;&nbsp;SELECT <br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;strftime('%Y-%m', order_date) as month,<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;COUNT(DISTINCT customer_id) as customers,<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;COUNT(*) as orders,<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;SUM(total) as revenue,<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;AVG(total) as avg_order_value<br>
+                            &nbsp;&nbsp;FROM orders<br>
+                            &nbsp;&nbsp;WHERE status = 'completed'<br>
+                            &nbsp;&nbsp;GROUP BY strftime('%Y-%m', order_date)<br>
+                            )<br>
+                            SELECT <br>
+                            &nbsp;&nbsp;month,<br>
+                            &nbsp;&nbsp;customers,<br>
+                            &nbsp;&nbsp;orders,<br>
+                            &nbsp;&nbsp;ROUND(revenue, 2) as revenue,<br>
+                            &nbsp;&nbsp;ROUND(avg_order_value, 2) as aov,<br>
+                            &nbsp;&nbsp;LAG(revenue) OVER (ORDER BY month) as prev_month_revenue,<br>
+                            &nbsp;&nbsp;ROUND(100.0 * (revenue - LAG(revenue) OVER (ORDER BY month)) / <br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;LAG(revenue) OVER (ORDER BY month), 2) as growth_pct<br>
+                            FROM monthly_stats<br>
+                            ORDER BY month DESC;
+                        </div>
+                    </div>
+                    
+                    <div class="example">
+                        <h4>Customer Segmentation (RFM)</h4>
+                        <div class="code-block">
+                            WITH customer_rfm AS (<br>
+                            &nbsp;&nbsp;SELECT <br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;customer_id,<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;julianday('now') - julianday(MAX(order_date)) as recency,<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;COUNT(*) as frequency,<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;SUM(total) as monetary<br>
+                            &nbsp;&nbsp;FROM orders<br>
+                            &nbsp;&nbsp;WHERE status = 'completed'<br>
+                            &nbsp;&nbsp;GROUP BY customer_id<br>
+                            )<br>
+                            SELECT <br>
+                            &nbsp;&nbsp;customer_id,<br>
+                            &nbsp;&nbsp;recency,<br>
+                            &nbsp;&nbsp;frequency,<br>
+                            &nbsp;&nbsp;monetary,<br>
+                            &nbsp;&nbsp;CASE <br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;WHEN recency <= 30 AND frequency >= 5 AND monetary >= 1000 THEN 'VIP'<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;WHEN recency <= 60 AND frequency >= 3 THEN 'Active'<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;WHEN recency > 180 THEN 'At Risk'<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;ELSE 'Regular'<br>
+                            &nbsp;&nbsp;END as segment<br>
+                            FROM customer_rfm;
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="concept">
+                    <h3>Social Media: Engagement Analysis</h3>
+                    
+                    <div class="example">
+                        <h4>Top Posts by Engagement</h4>
+                        <div class="code-block">
+                            SELECT <br>
+                            &nbsp;&nbsp;p.id,<br>
+                            &nbsp;&nbsp;p.title,<br>
+                            &nbsp;&nbsp;u.username,<br>
+                            &nbsp;&nbsp;p.created_at,<br>
+                            &nbsp;&nbsp;COUNT(DISTINCT l.user_id) as likes,<br>
+                            &nbsp;&nbsp;COUNT(DISTINCT c.id) as comments,<br>
+                            &nbsp;&nbsp;COUNT(DISTINCT s.user_id) as shares,<br>
+                            &nbsp;&nbsp;(COUNT(DISTINCT l.user_id) * 1 + <br>
+                            &nbsp;&nbsp;&nbsp;COUNT(DISTINCT c.id) * 2 + <br>
+                            &nbsp;&nbsp;&nbsp;COUNT(DISTINCT s.user_id) * 3) as engagement_score<br>
+                            FROM posts p<br>
+                            JOIN users u ON p.user_id = u.id<br>
+                            LEFT JOIN likes l ON p.id = l.post_id<br>
+                            LEFT JOIN comments c ON p.id = c.post_id<br>
+                            LEFT JOIN shares s ON p.id = s.post_id<br>
+                            WHERE p.created_at >= date('now', '-7 days')<br>
+                            GROUP BY p.id, p.title, u.username, p.created_at<br>
+                            ORDER BY engagement_score DESC<br>
+                            LIMIT 10;
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="concept">
+                    <h3>Inventory Management</h3>
+                    
+                    <div class="example">
+                        <h4>Low Stock Alert</h4>
+                        <div class="code-block">
+                            WITH product_velocity AS (<br>
+                            &nbsp;&nbsp;SELECT <br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;product_id,<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;AVG(quantity) as avg_daily_sales<br>
+                            &nbsp;&nbsp;FROM order_items oi<br>
+                            &nbsp;&nbsp;JOIN orders o ON oi.order_id = o.id<br>
+                            &nbsp;&nbsp;WHERE o.order_date >= date('now', '-30 days')<br>
+                            &nbsp;&nbsp;GROUP BY product_id<br>
+                            )<br>
+                            SELECT <br>
+                            &nbsp;&nbsp;p.id,<br>
+                            &nbsp;&nbsp;p.name,<br>
+                            &nbsp;&nbsp;p.stock,<br>
+                            &nbsp;&nbsp;ROUND(pv.avg_daily_sales, 2) as avg_daily_sales,<br>
+                            &nbsp;&nbsp;ROUND(p.stock / NULLIF(pv.avg_daily_sales, 0), 1) as days_until_stockout,<br>
+                            &nbsp;&nbsp;CASE <br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;WHEN p.stock / NULLIF(pv.avg_daily_sales, 0) < 7 THEN 'URGENT'<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;WHEN p.stock / NULLIF(pv.avg_daily_sales, 0) < 14 THEN 'Warning'<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;ELSE 'OK'<br>
+                            &nbsp;&nbsp;END as status<br>
+                            FROM products p<br>
+                            LEFT JOIN product_velocity pv ON p.id = pv.product_id<br>
+                            WHERE p.stock / NULLIF(pv.avg_daily_sales, 0) < 14<br>
+                            ORDER BY days_until_stockout;
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                <h2>🎓 Practice Challenges</h2>
+            </div>
+            <div class="card-body">
+                <div class="concept">
+                    <h3>Level 1: Beginner</h3>
+                    <div class="tip-box">
+                        1. Find all customers who placed an order in the last 30 days<br>
+                        2. Calculate total revenue by product category<br>
+                        3. List employees and their managers' names<br>
+                        4. Find products that were never ordered
+                    </div>
+                </div>
+                
+                <div class="concept">
+                    <h3>Level 2: Intermediate</h3>
+                    <div class="tip-box">
+                        1. Find the 2nd highest salary in each department<br>
+                        2. Calculate running total of sales by date<br>
+                        3. Find customers who ordered product A but not product B<br>
+                        4. Get month-over-month growth percentage
+                    </div>
+                </div>
+                
+                <div class="concept">
+                    <h3>Level 3: Advanced</h3>
+                    <div class="tip-box">
+                        1. Find customers who made 3+ consecutive monthly purchases<br>
+                        2. Calculate cohort retention rates<br>
+                        3. Identify products frequently bought together<br>
+                        4. Create a leaderboard with rank ties handled properly
+                    </div>
+                </div>
+                
+                <div class="success-box">
+                    <strong>Keep Learning!</strong> The best way to master SQL is to practice with real datasets. Try Kaggle datasets, sample databases, or build your own project database!
+                </div>
+            </div>
+        </div>
+        
+        <footer>
+            <p>Advanced SQL Concepts © 2025 | Continue your journey to SQL mastery</p>
+            <p style="margin-top: 10px; font-size: 0.8rem; opacity: 0.8;">Remember: Great queries are built through practice and optimization! 🚀</p>
+        </footer>
+    </div>
+</body>
+</html>
